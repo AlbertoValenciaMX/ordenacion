@@ -11,3 +11,8 @@ class Screen:
 
     def procesoBody(self, proceso):
         print("{} - {} - {} - {}".format(proceso.get_pid(), proceso.get_estado(), proceso.get_ubicacion(), proceso.get_duracion()))
+
+    def procesoFoot(self, procesos):
+        print("Salida")
+        for index, p in enumerate(procesos):
+            print("PID #{} - {}".format(index, p.get_pid()))
