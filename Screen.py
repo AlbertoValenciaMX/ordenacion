@@ -1,3 +1,4 @@
+import time
 class Screen:
 
     def __init__(self):
@@ -5,6 +6,7 @@ class Screen:
 
     def procesoHead(self):
         print("Procesos")
+        print("Tiempo: {}".format(time.time()))
         print("PID - ESTADO - UBICACION - DURACION")
 
     def procesoBody(self, proceso):
