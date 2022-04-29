@@ -1,4 +1,6 @@
 from enum import Enum
+
+
 class Proceso:
     def __init__(self, pid, llegada, duracion, prioridad):
         self._pid = pid
@@ -21,13 +23,13 @@ class Proceso:
         self._estado = estado
 
     def get_ubicacion(self):
-        return self._ubicacion.cv
+        return self._ubicacion.value
 
     def set_ubicacion(self, ubicacion):
         self._ubicacion = ubicacion
 
     def get_duracion(self):
-        return self._duracion.value
+        return self._duracion
 
     def set_duracion(self, duracion):
         self._duracion = duracion
@@ -44,11 +46,13 @@ class Proceso:
     def set_prioridad(self, prioridad):
         self._prioridad = prioridad
 
+
 class Estado (Enum):
     Inactivo = "Inactivo"
     Espera = "Espera"
     Ejecucion = "Ejecucion"
     Salida = "Salida"
+
 
 class Ubicacion (Enum):
     Inactivo = 0
