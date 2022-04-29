@@ -5,9 +5,11 @@ class Screen:
 
     def __init__(self):
         self.nombre = "Screen"
-        self._tiempo = 0
 
     def imprimirProcesosActivos(self, activos, espera, finalizados):
+        print("Procesos en espera: {}".format(len(espera)))
+        for p in activos:
+            self.procesoBody(p)
         self.procesoHead()
         for p in activos:
             self.procesoBody(p)
@@ -21,7 +23,6 @@ class Screen:
 
     def procesoHead(self):
         print("Procesos")
-        print("Tiempo: {}".format(self._tiempo))
         print("PID - ESTADO - UBICACION - DURACION")
 
     def procesoBody(self, proceso):
@@ -33,6 +34,8 @@ class Screen:
         for index, p in enumerate(procesos):
             print("PID #{} - {}".format(index+1, p.get_pid()))
 
-    def detener(self):
-        time.sleep(3)
-        self._tiempo += 1
+    def tiempo(self, tiempo):
+        print("Tiempo: {}".format(tiempo))
+
+    def quantum(self, quantum):
+        print("Quantum: {}".format(quantum))

@@ -55,8 +55,8 @@ class Estado (Enum):
 
 
 class Ubicacion (Enum):
-    Inactivo = 0
-    Espera = 1
-    CPU = 2
-    Memoria = 3
-    Finalizado = 4
+    Inactivo = "Inactivo"
+    Espera = "Espera"
+    CPU = "CPU"
+    Memoria = "Memoria"
+    Salida = "Salida"
