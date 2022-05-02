@@ -31,6 +31,19 @@ class Ajuste:
         self.m4.insert(0, proceso)
         return self.agruparMemoria()
 
+    def RR(self, procesos, memoria):
+        self.filtroNivel(memoria)
+        for proceso in procesos:
+            if proceso.get_prioridad() == 1:
+                self.m1.append(proceso)
+            elif proceso.get_prioridad() == 2:
+                self.m2.append(proceso)
+            elif proceso.get_prioridad() == 3:
+                self.m3.append(proceso)
+            elif proceso.get_prioridad() == 4:
+                self.m4.append(proceso)
+        return self.agruparMemoria()
+
     def filtroNivel(self, memoria):
         self.m1 = []
         self.m2 = []
