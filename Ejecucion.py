@@ -11,7 +11,8 @@ class Ejecucion:
     _memoria = []
     _tiempo = 0
     _quantum = 0
-    _cpuf = False
+    _cpu_busy = False
+    _proceso = None
     sc = Screen()
 
     def __init__(self, procesos, maxQuantum=2):
@@ -22,12 +23,14 @@ class Ejecucion:
     def inicio(self):
         self.sumarTiempo()
         self.ingresoProcesos()
-        if self._cpuf:
+        if self._cpu_busy:
+            self.cpu(self._proceso)
             self.salidaProcesos()
         else:
             self._procesos = self.ajusteProcesos(self._procesos)
-            proceso = self.ultimoProceso()
-            self.cpu(proceso)
+            self._proceso = self.ultimoProceso()
+            self.cpu(self._proceso)
+            self.salidaProcesos()
 
     def sumarTiempo(self):
         time.sleep(1)
@@ -45,7 +48,7 @@ class Ejecucion:
 
     def ultimoProceso(self):
         if self._memoria == []:
-            if self._activos == []:
+            if self._espera == []:
                 self.inicio()
             else:
                 self._memoria.append(self._espera.pop(0))
@@ -53,14 +56,16 @@ class Ejecucion:
 
     def salidaProcesos(self):
         self.filtrarProcesos(self._procesos)
-        self.sc.tiempo(self._tiempo)
-        self.sc.imprimirProcesos(self._activos, self._finalizados)
+        self.sc.imprimirProcesos(self._activos, self._finalizados, self._tiempo)
         if len(self._procesos) == len(self._finalizados):
             print("Finalizacion de todos los procesos")
         else:
-            self.ejecucion()
+            self.inicio()
 
     def filtrarProcesos(self, procesos):
+        self._activos = []
+        self._inactivos = []
+        self._finalizados = []
         for p in procesos:
             estado = p.get_estado()
             if estado == "Inactivo":
@@ -73,16 +78,15 @@ class Ejecucion:
                 print("Error")
 
     def cpu(self, proceso):
-        proceso.set_ubicacion(Ubicacion.CPU)
-        proceso.set_estado(Estado.Ejecucion)
         if proceso.get_duracion() > 1:
-            self._cpuf = True
+            proceso.set_ubicacion(Ubicacion.CPU)
+            proceso.set_estado(Estado.Ejecucion)
+            self._cpu_busy = True
             proceso.set_duracion(proceso.get_duracion() - 1)
         else:
             proceso.set_estado(Estado.Salida)
             proceso.set_ubicacion(Ubicacion.Salida)
             proceso.set_duracion(0)
             self._finalizados.append(proceso)
-            self._cpuf = False
-            self.sc.imprimirProcesos(self._activos, self._finalizados)
+            self._cpu_busy = False
 

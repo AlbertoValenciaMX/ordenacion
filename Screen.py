@@ -15,7 +15,8 @@ class Screen:
             self.procesoBody(p)
         self.procesosFoot(finalizados)
 
-    def imprimirProcesos(self, activos, finalizados):
+    def imprimirProcesos(self, activos, finalizados, tiempo):
+        self.tiempo(tiempo)
         self.procesoHead()
         for p in activos:
             self.procesoBody(p)
@@ -26,7 +27,7 @@ class Screen:
         print("PID - ESTADO - UBICACION - DURACION")
 
     def procesoBody(self, proceso):
-        print("{} - {} - {} - {}".format(proceso.get_pid(),
+        print("{}  -  {} - {} -  {}".format(proceso.get_pid(),
               proceso.get_estado(), proceso.get_ubicacion(), proceso.get_duracion()))
 
     def procesosFoot(self, procesos):
