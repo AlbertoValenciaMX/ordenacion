@@ -4,16 +4,17 @@ from Screen import *
 
 
 class Ejecucion:
-    _inactivos = []
-    _activos = []
-    _finalizados = []
-    _espera = []
-    _memoria = []
-    _tiempo = 0
+    _inactivos = [] # Procesos inactivos
+    _activos = []   # Procesos en ejecucion
+    _finalizados = [] # Orden de impresion
+    _espera = []    # Procesos sin orden
+    _memoria = []   # Memoria
+    _tiempo = 0     # Tiempo de ejecucion
     _quantum = 0
-    _cpu_busy = False
+    _cpuBusy = False
     _proceso = None
     sc = Screen()
+    ajuste = Ajuste()
 
     def __init__(self, procesos, maxQuantum=2):
         self._procesos = procesos
@@ -23,11 +24,11 @@ class Ejecucion:
     def inicio(self):
         self.sumarTiempo()
         self.ingresoProcesos()
-        if self._cpu_busy:
+        self.ajusteProcesosMemoria()
+        if self._cpuBusy:
             self.cpu(self._proceso)
             self.salidaProcesos()
         else:
-            self._procesos = self.ajusteProcesos(self._procesos)
             self._proceso = self.ultimoProceso()
             self.cpu(self._proceso)
             self.salidaProcesos()
@@ -43,8 +44,19 @@ class Ejecucion:
                 p.set_estado(Estado.Espera)
                 p.set_ubicacion(Ubicacion.Espera)
 
-    def ajusteProcesos(self, procesos):
-        return procesos
+    def ajusteProcesosMemoria(self):
+        for proceso in self._espera:
+            if proceso.get_prioridad() == 1:
+                self._memoria = self.ajuste.FIFO(proceso, self._memoria)
+            elif proceso.get_prioridad() == 2:
+                self._memoria = self.ajuste.LJF(proceso, self._memoria)
+            elif proceso.get_prioridad() == 3:
+                self._memoria = self.ajuste.SJF(proceso, self._memoria)
+            elif proceso.get_prioridad() == 4:
+                self._memoria = self.ajuste.LIFO(proceso, self._memoria)
+            else:
+                print("Error")
+        self._espera = []
 
     def ultimoProceso(self):
         if self._memoria == []:
@@ -65,7 +77,6 @@ class Ejecucion:
     def filtrarProcesos(self, procesos):
         self._activos = []
         self._inactivos = []
-        self._finalizados = []
         for p in procesos:
             estado = p.get_estado()
             if estado == "Inactivo":
@@ -73,7 +84,8 @@ class Ejecucion:
             elif estado == "Espera" or estado == "Ejecucion":
                 self._activos.append(p)
             elif estado == "Salida":
-                self._finalizados.append(p)
+                pass
+                # self._finalizados.append(p)
             else:
                 print("Error")
 
@@ -81,12 +93,12 @@ class Ejecucion:
         if proceso.get_duracion() > 1:
             proceso.set_ubicacion(Ubicacion.CPU)
             proceso.set_estado(Estado.Ejecucion)
-            self._cpu_busy = True
+            self._cpuBusy = True
             proceso.set_duracion(proceso.get_duracion() - 1)
         else:
             proceso.set_estado(Estado.Salida)
             proceso.set_ubicacion(Ubicacion.Salida)
             proceso.set_duracion(0)
             self._finalizados.append(proceso)
-            self._cpu_busy = False
+            self._cpuBusy = False
 
