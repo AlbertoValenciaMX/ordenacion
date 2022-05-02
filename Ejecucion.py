@@ -34,7 +34,7 @@ class Ejecucion:
             self.salidaProcesos()
 
     def sumarTiempo(self):
-        time.sleep(1)
+        time.sleep(2)
         self._tiempo += 1
 
     def ingresoProcesos(self):

@@ -24,11 +24,11 @@ class Screen:
 
     def procesoHead(self):
         print("Procesos")
-        print("PID - ESTADO - UBICACION - DURACION")
+        print("PID - ESTADO - UBICACION - DURACION - PRIORIDAD")
 
     def procesoBody(self, proceso):
-        print("{}  -  {} - {} -  {}".format(proceso.get_pid(),
-              proceso.get_estado(), proceso.get_ubicacion(), proceso.get_duracion()))
+        print("{}  - {} - {}    -     {}   -   {}".format(proceso.get_pid(),
+              proceso.get_estado(), proceso.get_ubicacion(), proceso.get_duracion(), proceso.get_prioridad()))
 
     def procesosFoot(self, procesos):
         print("Salida")
